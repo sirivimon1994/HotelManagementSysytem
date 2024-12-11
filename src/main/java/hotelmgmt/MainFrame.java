@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import colors.HotelAppColors;
 import hotelmgmt.controller.ReservationController;
@@ -24,7 +26,7 @@ public class MainFrame extends JFrame {
     private JLabel timeLabel;
     private JLabel menuTitleLabel;
     private JPanel contentPanel;
-
+    static ResourceBundle bundle;
     public MainFrame() {
         
         LoginDialog loginDialog = new LoginDialog(this);
@@ -60,12 +62,12 @@ public class MainFrame extends JFrame {
         ReservationController reservationController = new ReservationController(reservationView);
         reservationView.setController(reservationController);
 
-        contentPanel.add(reservationView, "Reservation");
-        contentPanel.add(new CheckInOutPanel(), "Check-In/Out");
-        contentPanel.add(new CustomerPanel(), "Guests");
-        contentPanel.add(new StaffPanel(), "Staff");
-        contentPanel.add(new ReportsPanel(), "Reports");
-        contentPanel.add(new RoomTypePanel(), "Room Types");
+        contentPanel.add(reservationView, bundle.getString("reservation"));
+        contentPanel.add(new CheckInOutPanel(), bundle.getString("checkInOut"));
+        contentPanel.add(new CustomerPanel(), bundle.getString("guests"));
+        contentPanel.add(new StaffPanel(), bundle.getString("staff"));
+        contentPanel.add(new ReportsPanel(), bundle.getString("reports"));
+        contentPanel.add(new RoomTypePanel(), bundle.getString("roomTypes"));
     }
 
     private JPanel createHeaderAndTabsPanel() {
@@ -158,12 +160,14 @@ public class MainFrame extends JFrame {
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
         menuPanel.setOpaque(false);
 
-        menuPanel.add(createMenuButton("Reservation", "/images/menu_reservation.png", e -> showPanel("Reservation")));
-        menuPanel.add(createMenuButton("Check-In/Out", "/images/menu_checkinout.png", e -> showPanel("Check-In/Out")));
-        menuPanel.add(createMenuButton("Guests", "/images/menu_guests.png", e -> showPanel("Guests")));
-        menuPanel.add(createMenuButton("Staff", "/images/menu_staff.png", e -> showPanel("Staff")));
-        menuPanel.add(createMenuButton("Reports", "/images/menu_reports.png", e -> showPanel("Reports")));
-        menuPanel.add(createMenuButton("Room Types", "/images/menu_rooms.png", e -> showPanel("Room Types")));
+     // Assuming 'bundle' is a ResourceBundle instance loaded for the appropriate Locale
+        menuPanel.add(createMenuButton(bundle.getString("reservation"), "/images/menu_reservation.png", e -> showPanel("Reservation")));
+        menuPanel.add(createMenuButton(bundle.getString("checkInOut"), "/images/menu_checkinout.png", e -> showPanel("Check-In/Out")));
+        menuPanel.add(createMenuButton(bundle.getString("guests"), "/images/menu_guests.png", e -> showPanel("Guests")));
+        menuPanel.add(createMenuButton(bundle.getString("staff"), "/images/menu_staff.png", e -> showPanel("Staff")));
+        menuPanel.add(createMenuButton(bundle.getString("reports"), "/images/menu_reports.png", e -> showPanel("Reports")));
+        menuPanel.add(createMenuButton(bundle.getString("roomTypes"), "/images/menu_rooms.png", e -> showPanel("Room Types")));
+
 
         leftMenuPanel.add(menuPanel, BorderLayout.CENTER);
 
@@ -218,9 +222,15 @@ public class MainFrame extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            MainFrame mainFrame = new MainFrame();
-            mainFrame.setVisible(true);
-        });
+    	
+    	    SwingUtilities.invokeLater(() -> {
+    	    	 String baseName = "resources.strings";
+    	    	    Locale locale = new Locale("de", "DE"); 
+    	    	    bundle = ResourceBundle.getBundle(baseName, locale);
+    	    	    System.out.println("Locale: " + Locale.getDefault());
+    	    	    System.out.println("Bundle loaded: " + bundle.getLocale());
+    	        MainFrame mainFrame = new MainFrame();
+    	        mainFrame.setVisible(true);
+    	    });
     }
 }
