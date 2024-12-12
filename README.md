@@ -36,4 +36,4 @@ components project hotel management diagram
 * Customer Report
 * Staff Report
 * Room Report
-
+//
